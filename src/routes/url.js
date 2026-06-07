@@ -1,10 +1,28 @@
 const express = require("express")
 const router = express.Router();
-
+const z = require("zod");
 const urlmap = {};
+
+
+const urlcheck = z.object({
+    originalUrl: z.string().url("invalid url")
+})
+
+
 
 router.post('/shorten', function(req, res) {
     const { originalUrl}  = req.body;
+
+
+
+    const validate = urlcheck.safeParse(req.body)
+
+if(!validate.success) {
+    return res.json({
+        message: "randi ke bacche user"
+    })
+}
+
 
 if (!originalUrl) {
     return res.status(400).json({
