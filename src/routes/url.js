@@ -3,6 +3,7 @@ const router = express.Router();
 const z = require("zod");
 const urlmap = {};
 const { PrismaClient } = require('@prisma/client');
+const redis = require("../redis")
 
 const prisma = new PrismaClient();
 
@@ -56,6 +57,16 @@ router.get('/:shortCode', async function(req,res) {
     const {shortCode} = req.params;
 
 
+    const cachedUrl = await redis.get(shortCode);
+
+if (cachedUrl) {
+    console.log('CACHE HIT');
+    return res.redirect(cachedUrl);
+}
+
+console.log('CACHE MISS');
+
+
     const url = await prisma.url.findUnique({ where: { shortCode } });
 
     if(!url){
@@ -64,6 +75,14 @@ router.get('/:shortCode', async function(req,res) {
         })
 
     }
+
+
+
+    await redis.set(
+    shortCode,
+    url.originalUrl
+);
+
     res.redirect(url.originalUrl)
 })
 
