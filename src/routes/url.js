@@ -19,7 +19,7 @@ router.post('/shorten', function(req, res) {
 
 if(!validate.success) {
     return res.json({
-        message: "randi ke bacche user"
+        message: "not valid url "
     })
 }
 
