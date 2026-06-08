@@ -2,6 +2,11 @@ const express = require("express")
 const router = express.Router();
 const z = require("zod");
 const urlmap = {};
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
+
+
 
 
 const urlcheck = z.object({
@@ -10,7 +15,7 @@ const urlcheck = z.object({
 
 
 
-router.post('/shorten', function(req, res) {
+router.post('/shorten', async function(req, res) {
     const { originalUrl}  = req.body;
 
 
@@ -38,19 +43,28 @@ res.status(201).json({
     originalUrl
 })
 
+const url = await prisma.url.create({
+    data: { originalUrl,
+    shortCode
+    }
+})
+console.log(url)
+
 })
 
-router.get('/:code', function(req,res) {
-    const {code} = req.params;
-    const originalUrl = urlmap[code];
+router.get('/:shortCode', async function(req,res) {
+    const {shortCode} = req.params;
 
-    if(!originalUrl){
+
+    const url = await prisma.url.findUnique({ where: { shortCode } });
+
+    if(!url){
         return res.status(404).json({
-            error: "short url not found"
+            error: "not a unique url try again"
         })
 
     }
-    res.redirect(originalUrl)
+    res.redirect(url.originalUrl)
 })
 
 module.exports = router;
