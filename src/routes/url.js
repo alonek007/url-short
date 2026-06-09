@@ -8,7 +8,20 @@ const redis = require("../redis")
 const prisma = new PrismaClient();
 
 
+// base62 
+const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function encode62(num){
+    let result = "";
+    while( num > 0) {
+        result = chars[num%62] + result;
+        num = Math.floor(num/62)
+    }
 
+    return result;
+}
+
+
+//validate url
 
 const urlcheck = z.object({
     originalUrl: z.string().url("invalid url")
