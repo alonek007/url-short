@@ -49,26 +49,38 @@ if (!originalUrl) {
 }
 
 
-const shortCode  = Math.random().toString(36).substring(2,8);
-urlmap[shortCode] = originalUrl;
-res.status(201).json({
-    shortCode,
-    shortUrl: `http://localhost:${process.env.PORT}/api/${shortCode}`,
-    originalUrl
-})
 
-const url = await prisma.url.create({
+
+const createdurl = await prisma.url.create({
     data: { originalUrl,
-    shortCode
+    shortCode : `temp-${Date.now()}`
     }
 })
-console.log(url)
+console.log(createdurl)
 
+const shortCode = encode62(createdurl.id);
+console.log(shortCode)
+const url = await prisma.url.update({ where: { id: createdurl.id }, data: { shortCode } });
+
+
+
+
+
+res.status(201).json({
+    "shortCHode" : shortCode,
+    "shortUrl": `http://localhost:3000/${shortCode}`,
+    "originalUrl": originalUrl
 })
+})
+
+
+
+
+
+
 
 router.get('/:shortCode', async function(req,res) {
     const {shortCode} = req.params;
-
 
     const cachedUrl = await redis.get(shortCode);
 
@@ -80,14 +92,9 @@ if (cachedUrl) {
 console.log('CACHE MISS');
 
 
-    const url = await prisma.url.findUnique({ where: { shortCode } });
+const url = await prisma.url.findUnique({ where: { shortCode: shortCode } } );
+console.log("url:", url);
 
-    if(!url){
-        return res.status(404).json({
-            error: "not a unique url try again"
-        })
-
-    }
 
 
 
@@ -96,7 +103,8 @@ console.log('CACHE MISS');
     url.originalUrl
 );
 
+
     res.redirect(url.originalUrl)
-})
+});
 
 module.exports = router;
