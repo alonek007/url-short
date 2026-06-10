@@ -91,7 +91,7 @@ if (cachedUrl) {
 
 console.log('CACHE MISS');
 
-
+console.log("shortCode:", shortCode);
 const url = await prisma.url.findUnique({ where: { shortCode: shortCode } } );
 console.log("url:", url);
 

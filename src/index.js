@@ -2,6 +2,10 @@ const express = require("express");
 const dotenv = require("dotenv");
 
 const ratelimit = require("express-rate-limit");
+const path = require("path")
+
+
+
 
 const limiter = ratelimit({
   windowMs: 1 * 60 * 1000, // 15 minutes
@@ -26,6 +30,10 @@ start();
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../public")));
+// const ok = path.join(__dirname, "../public");
+// console.log(__dirname)
+// console.log(ok)  debugging stuff
 
 app.use(limiter);
 
