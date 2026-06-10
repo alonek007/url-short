@@ -1,0 +1,25 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql://alonek007:test@postgres:5432/url-shortener
+      REDIS_URL: redis://redis:6379
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: alonek007
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: url-shortener
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
