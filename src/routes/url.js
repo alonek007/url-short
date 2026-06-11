@@ -68,7 +68,7 @@ const url = await prisma.url.update({ where: { id: createdurl.id }, data: { shor
 
 res.status(201).json({
     "shortCHode" : shortCode,
-    "shortUrl": `http://localhost:3000/${shortCode}`,
+    "shortUrl": `https://url-short-production-3dbd.up.railway.app/${shortCode}`,
     "originalUrl": originalUrl
 })
 })
