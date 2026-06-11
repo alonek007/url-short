@@ -1,6 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
-
+const cors = require("cors");
 const ratelimit = require("express-rate-limit");
 const path = require("path")
 
@@ -29,6 +29,9 @@ start();
 
 dotenv.config();
 const app = express();
+app.use(cors({
+  origin: "https://url-short-production-3dbd.up.railway.app/"
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 // const ok = path.join(__dirname, "../public");
