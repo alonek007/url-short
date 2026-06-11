@@ -30,7 +30,7 @@ start();
 dotenv.config();
 const app = express();
 app.use(cors({
-  origin: "https://url-short-production-3dbd.up.railway.app/"
+  origin: "urlsh.up.railway.app/"
 }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
