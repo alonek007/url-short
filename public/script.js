@@ -4,7 +4,7 @@ button.addEventListener("click", async function () {
     const originalUrl = document.getElementById("url").value;
 
     const response = await fetch(
-        "http://localhost:3000/shorten",{
+        "https://url-short-production-3dbd.up.railway.app/shorten",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
