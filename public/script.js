@@ -4,7 +4,7 @@ button.addEventListener("click", async function () {
     const originalUrl = document.getElementById("url").value;
 
     const response = await fetch(
-        "https://url-short-production-3dbd.up.railway.app/shorten",{
+        "https://urlsh.up.railway.app/shorten",{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
